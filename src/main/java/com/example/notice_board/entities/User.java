@@ -1,5 +1,6 @@
 package com.example.notice_board.entities;
 
+import com.example.notice_board.enums.EnumsRoles;
 import com.example.notice_board.user.LoginAttemptValidationGroup;
 import com.example.notice_board.user.ValidLoginAttempt;
 import org.hibernate.validator.constraints.Email;
@@ -7,6 +8,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 
 @Entity
@@ -25,6 +28,17 @@ public class User {
   // domyslny regex w tej adnotacji to .*,co oznacza że validacja przepuszczałaby pusty string.
   @Email(regexp = ".+")
   private String email;
+
+  @OneToMany(mappedBy = "user" ,cascade = {CascadeType.ALL})
+  private List<Notice> notices = new ArrayList<>();
+
+  @OneToMany(mappedBy = "user1",cascade = {CascadeType.ALL})
+  private List<Comment> comments = new ArrayList<>();
+
+  @Enumerated(EnumType.STRING)
+  private EnumsRoles enumsRoles;
+
+
 
   public String getUsername() {
     return username;
@@ -65,6 +79,30 @@ public class User {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public List<Notice> getNotices() {
+    return notices;
+  }
+
+  public void setNotices(List<Notice> notices) {
+    this.notices = notices;
+  }
+
+  public List<Comment> getComments() {
+    return comments;
+  }
+
+  public void setComments(List<Comment> comments) {
+    this.comments = comments;
+  }
+
+  public EnumsRoles getEnumsRoles() {
+    return enumsRoles;
+  }
+
+  public void setEnumsRoles(EnumsRoles enumsRoles) {
+    this.enumsRoles = enumsRoles;
   }
 
   @Override
